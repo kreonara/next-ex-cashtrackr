@@ -3,12 +3,17 @@ import { BudgetController } from '../controllers/BudgetController';
 import { body, param } from 'express-validator';
 import { handleInputErrors } from '../middleware/validation';
 import { validateBudgetExists, validateBudgetId, validateBudgetInputs } from '../middleware/budget';
+import { ExpensesController } from '../controllers/ExpenseController';
+import { validateExpenseExists, validateExpenseId, validateExpenseInputs } from '../middleware/expense';
 
 const router = Router()
 
 // cada ruta que use el 'id' se ejecuta el middleware
 // router.param('budgetId', validateBudgetId)
 // router.param('budgetId', validateBudgetExists)
+
+router.param('expenseId', validateExpenseId)
+router.param('expenseId', validateExpenseExists)
 
 router.get('/', BudgetController.getAll)
 
@@ -44,5 +49,27 @@ router.delete('/:budgetId',
   validateBudgetExists,
   BudgetController.deleteById
 )
+
+
+/** Routes for expenses */
+
+router.post('/:budgetId/expenses',
+  validateExpenseInputs,
+  handleInputErrors,
+  ExpensesController.create
+)
+
+// se valida en la linea 15
+router.get('/:budgetId/expenses/:expenseId', ExpensesController.getById)
+
+router.put('/:budgetId/expenses/:expenseId',
+  // validateExpenseId, // se valida en la linea 15
+  validateExpenseInputs,
+  handleInputErrors,
+  ExpensesController.updateById
+)
+
+router.delete('/:budgetId/expenses/:expenseId', ExpensesController.deleteById)
+
 
 export default router

@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import Budget from '../models/Budget';
+import Expense from '../models/Expense';
 
 export class BudgetController {
 
@@ -37,7 +38,9 @@ export class BudgetController {
   static getById = async(req: Request, res: Response) => {
     try {
       const { budgetId } = req.params
-      const budget = await Budget.findByPk(+budgetId)
+      const budget = await Budget.findByPk(+budgetId, {
+        include: [Expense]
+      })
       if(!budget) {
         const error = new Error('Presupuesto no encontrado')
         return res.status(404).json({error: error.message})
