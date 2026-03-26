@@ -11,10 +11,10 @@ export class BudgetController {
           ['createdAt', 'DESC']
         ],
         // limit: 2,
-        // where: {
-        //   name: 'vacaciones'
-        // }
-        // TODO: Filtrar por el usuario autenticado
+        // Filtrar por el usuario autenticado
+        where: {
+          userId: req.user.id
+        }
       })
 
       res.jsonp(budgets)
@@ -27,6 +27,7 @@ export class BudgetController {
   static create = async(req: Request, res: Response) => {
     try {
       const budget = new Budget(req.body)
+      budget.userId = req.user.id
       await budget.save()
       res.status(201).json('Presupuesto Creado Correctamente')
     } catch (error) {
@@ -41,7 +42,7 @@ export class BudgetController {
       const budget = await Budget.findByPk(+budgetId, {
         include: [Expense]
       })
-      if(!budget) {
+      if(!budget || req.budget.userId !== req.user.id) {
         const error = new Error('Presupuesto no encontrado')
         return res.status(404).json({error: error.message})
       }
@@ -57,7 +58,7 @@ export class BudgetController {
     try {
       const { budgetId } = req.params
       const budget = await Budget.findByPk(+budgetId)
-      if(!budget) {
+      if(!budget || req.budget.userId !== req.user.id) {
         const error = new Error('Presupuesto no encontrado')
         return res.status(404).json({error: error.message})
       }
