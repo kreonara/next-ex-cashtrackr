@@ -1,28 +1,24 @@
 import { MailtrapClient } from 'mailtrap';
+import { transport } from '../config/mailer';
 
-const TOKEN = process.env.MAILTRAP_API_KEY;
+type EmailType = {
+  name: string
+  email: string
+  token: string
+}
 
-const client = new MailtrapClient({
-  token: TOKEN,
-});
-
-const sender = {
-  email: "admin@kreonara.com",
-  name: "Cashtrackr",
-};
-const recipients = [
-  {
-    email: "icoddes@gmail.com",
+export class AuthEmail {
+  static sendConfirmationEmail = async(user: EmailType) => {
+      const email = await transport.sendMail({
+        from: 'CashTrackr <admin@kreonara.com>',
+        to: user.email,
+        subject: "CashTrackr - Confirma tu cuenta",
+        html: `<p>Hola: ${user.name}, has creado tu cuenta en CashTrackr, ya esta casi lista</p>
+        <p>Visita el siguiente enlace:</p>
+        <a href="#">Confirmar Cuenta</a>
+        <p>e ingresa el código: <b>${user.token}</b></p>`
+      })
+  
+      console.log('Mensaje enviado:', email.messageId)
   }
-];
-
-client
-  .send({
-    from: sender,
-    to: recipients,
-    subject: "CashTrackr - Confirma tu cuenta",
-    text: "Congrats for sending test email with Mailtrap!",
-    category: "Integration Test",
-    html: ``
-  })
-  .then(console.log, console.error);
+}

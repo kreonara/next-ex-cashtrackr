@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import User from '../models/User';
 import { hashPassword } from '../utils/auth';
 import { generateToken } from '../utils/token';
+import { AuthEmail } from '../emails/AuthEmail';
 
 export class AuthController {
 
@@ -15,18 +16,22 @@ export class AuthController {
       return res.status(409).json({error: error.message})
     }
 
-
-
     try {
       const user = new User(req.body)
       user.password = await hashPassword(password)
       user.token = generateToken()
       await user.save()
 
+      await AuthEmail.sendConfirmationEmail({
+        name: user.name,
+        email: user.email,
+        token: user.token
+      })
+
       res.json('Cuenta Creada Correctamente')
     } catch (error) {
       // console.log(error)
-      res.status(500).json({error: 'Ocurrió un error'})
+      res.status(500).json({error: 'Ocurrió un error en Auth'})
     }
   }
 }
