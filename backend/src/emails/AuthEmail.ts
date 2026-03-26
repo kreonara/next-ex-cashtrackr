@@ -1,4 +1,3 @@
-import { MailtrapClient } from 'mailtrap';
 import { transport } from '../config/mailer';
 
 type EmailType = {
