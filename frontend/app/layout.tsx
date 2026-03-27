@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const outfit = Outfit({
   subsets: ["latin"]
 });
 
@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${inter.className}`}
+      className={`${outfit.className}`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
