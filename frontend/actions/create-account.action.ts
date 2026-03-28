@@ -2,18 +2,31 @@
 
 import { ErrorResponseSchema, RegisterSchema, SuccessSchema } from "@/src/schemas"
 
-type ActionStateType = {
+export type ActionStateType = {
   errors: string[]
   success: string
+  values: {
+    email: string,
+    name: string,
+    password: string,
+    password_confirmation: string
+  }
+}
+
+const emptyValues = {
+  email: '',
+  name: '',
+  password: '',
+  password_confirmation: ''
 }
 
 // prevState es lo que le pasamos como initialState (state) desde useActionState: errors: []
-export async function register(prevState: ActionStateType, formData: FormData) {
+export async function register(prevState: ActionStateType, formData: FormData): Promise<ActionStateType> {
   const registerData = {
-    email: formData.get('email'),
-    name: formData.get('name'),
-    password: formData.get('password'),
-    password_confirmation: formData.get('password_confirmation')
+    email: (formData.get('email') ?? '') as string,
+    name: (formData.get('name') ?? '') as string,
+    password: (formData.get('password') ?? '') as string,
+    password_confirmation: (formData.get('password_confirmation') ?? '') as string
   }
 
   // validar
@@ -24,7 +37,8 @@ export async function register(prevState: ActionStateType, formData: FormData) {
     // console.log(errors)
     return {
       errors,
-      success: prevState.success
+      success: prevState.success,
+      values: registerData
     }
   }
 
@@ -49,7 +63,8 @@ export async function register(prevState: ActionStateType, formData: FormData) {
     
     return {
       errors: [error.error],
-      success: ''
+      success: '',
+      values: registerData
     }
   }
 
@@ -57,6 +72,7 @@ export async function register(prevState: ActionStateType, formData: FormData) {
 
   return {
     errors: [],
-    success
+    success,
+    values: emptyValues
   }
 }
