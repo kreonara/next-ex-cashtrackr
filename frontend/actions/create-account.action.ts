@@ -1,22 +1,31 @@
 "use server"
 
-import { RegisterSchema } from "@/src/schemas"
+import { ErrorResponseSchema, RegisterSchema, SuccessSchema } from "@/src/schemas"
 
-export async function register(formData: FormData) {
+type ActionStateType = {
+  errors: string[]
+  success: string
+}
+
+// prevState es lo que le pasamos como initialState (state) desde useActionState: errors: []
+export async function register(prevState: ActionStateType, formData: FormData) {
   const registerData = {
     email: formData.get('email'),
     name: formData.get('name'),
     password: formData.get('password'),
-    password_confirmation: formData.get('password')
+    password_confirmation: formData.get('password_confirmation')
   }
 
   // validar
   const register = RegisterSchema.safeParse(registerData)
-  const errors = register.error?.issues.map(error => error.message)
-  // console.log(errors)
   // console.log(register)
   if(!register.success) {
-    return {}
+    const errors = register.error.issues.map(error => error.message)
+    // console.log(errors)
+    return {
+      errors,
+      success: prevState.success
+    }
   }
 
   // enviar peticion hacia express
@@ -34,4 +43,20 @@ export async function register(formData: FormData) {
   })
 
   const response = await req.json()
+
+  if(req.status === 409) {
+    const error = ErrorResponseSchema.parse(response)
+    
+    return {
+      errors: [error.error],
+      success: ''
+    }
+  }
+
+  const success = SuccessSchema.parse(response) // con parse, pasa directo el valor del message
+
+  return {
+    errors: [],
+    success
+  }
 }
