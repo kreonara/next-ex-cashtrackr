@@ -1,8 +1,11 @@
 "use client"
 
+import { register } from "@/actions/create-account.action"
+
 const RegisterForm = () => {
   return (
     <form
+      action={register}
       className="mt-14 space-y-5"
       noValidate
     >
