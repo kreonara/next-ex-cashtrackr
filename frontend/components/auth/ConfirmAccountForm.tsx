@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from "next/navigation"
 
 const ConfirmAccountForm = () => {
-  const router = useRouter()
+  const router = useRouter() // solo en "use client"
   const [isComplete, setIsComplete] = useState(false)
   const [token, setToken] = useState("")
   

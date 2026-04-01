@@ -1,9 +1,27 @@
 "use client"
 
+import { authenticate } from "@/actions/authenticate-user.action"
+import { useActionState, useEffect } from "react"
+import { toast } from "react-toastify"
+
 const LoginForm = () => {
+  const [ state, action ] = useActionState(authenticate, {
+    errors: []
+  })
+
+  useEffect(() => {
+    if(state.errors) {
+      state.errors.forEach(error => {
+        toast.error(error)
+      })
+    }
+  }, [state])
+  
+
   return (
     <>
       <form
+        action={action}
         className="mt-14 space-y-5"
         noValidate
       >
