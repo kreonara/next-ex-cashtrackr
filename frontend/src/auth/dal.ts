@@ -3,6 +3,7 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { UserSchema } from "../schemas"
 import { cache } from "react"
+import getToken from "./token"
 
 // Data Access Layer
 export const verifySession = cache(async() => {
