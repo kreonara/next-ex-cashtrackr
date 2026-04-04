@@ -71,7 +71,7 @@ router.get('/user',
   AuthController.user
 )
 
-router.post('update-password',
+router.post('/update-password',
   authenticate,
   body('current_password')
     .notEmpty().withMessage('El password actual no puedo ir vacio'),
@@ -81,7 +81,7 @@ router.post('update-password',
   AuthController.updateCurrentUserPassword
 )
 
-router.post('check-password',
+router.post('/check-password',
   authenticate,
   body('password')
     .notEmpty().withMessage('El password no puedo ir vacio'),

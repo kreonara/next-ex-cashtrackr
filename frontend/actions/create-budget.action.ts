@@ -2,6 +2,7 @@
 
 import getToken from "@/src/auth/token"
 import { DraftBudgetSchema, SuccessSchema } from "@/src/schemas"
+import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 
 interface Props {
@@ -37,6 +38,8 @@ export async function createBudget(prevState: Props, formData: FormData) {
   })
 
   const data = await resp.json()
+
+  // revalidatePath('/admin')
 
   const success = SuccessSchema.parse(data)
 
