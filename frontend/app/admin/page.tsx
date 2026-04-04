@@ -17,6 +17,9 @@ async function getUserBudgets() {
   const resp = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${token}`
+    },
+    next: {
+      tags: ['all-budget']
     }
   })
 
