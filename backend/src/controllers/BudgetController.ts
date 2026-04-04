@@ -42,12 +42,12 @@ export class BudgetController {
       const budget = await Budget.findByPk(+budgetId, {
         include: [Expense]
       })
-      if(!budget || req.budget.userId !== req.user.id) {
+      if(!budget || budget.userId !== req.user.id) {
         const error = new Error('Presupuesto no encontrado')
         return res.status(404).json({error: error.message})
       }
 
-      res.json(budget)
+      res.json(budget.dataValues)
     } catch (error) {
       // console.log(error)
       res.status(500).json({error: 'Ocurrió un Error'})
@@ -58,7 +58,7 @@ export class BudgetController {
     try {
       const { budgetId } = req.params
       const budget = await Budget.findByPk(+budgetId)
-      if(!budget || req.budget.userId !== req.user.id) {
+      if(!budget || budget.userId !== req.user.id) {
         const error = new Error('Presupuesto no encontrado')
         return res.status(404).json({error: error.message})
       }

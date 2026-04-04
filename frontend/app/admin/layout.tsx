@@ -24,7 +24,7 @@ export default async function AdminLayout({
           <AdminMenu user={user} />
         </div>
       </header>
-      <section className='max-w-5xl mx-auto mt-20 p-3 py-10'>
+      <section className='lg:min-w-5xl mx-auto mt-20 p-3 py-10'>
         {children}
       </section>
       <ToastNotification />

@@ -4,3 +4,14 @@ export function formatCurrency(quantity: number) {
     currency: 'USD'
   }).format(quantity)
 }
+
+export function formatDate(isoString: string) {
+  const date = new Date(isoString)
+  const formatter = new Intl.DateTimeFormat('es-ES', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  })
+
+  return formatter.format(date)
+}
