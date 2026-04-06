@@ -102,3 +102,4 @@ export const DraftExpenseSchema = z.object({
 })
 
 export type Expense = z.infer<typeof ExpenseAPIResponseSchema>
+export type DraftExpense = z.infer<typeof DraftExpenseSchema>

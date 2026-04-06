@@ -15,9 +15,9 @@ const router = Router()
 
 router.use(authenticate) // req.user
 
-router.param('expenseId', validateExpenseId)
-router.param('expenseId', validateExpenseExists) // req.budget
-router.param('expenseId', hasAccess)
+// router.param('expenseId', validateExpenseId)
+// router.param('expenseId', validateExpenseExists) // req.budget
+// router.param('expenseId', hasAccess)
 
 router.get('/', BudgetController.getAll)
 
@@ -63,11 +63,18 @@ router.post('/:budgetId/expenses',
   ExpensesController.create
 )
 
-// se valida en la linea 15
-router.get('/:budgetId/expenses/:expenseId', ExpensesController.getById)
+// se valida en la linea 18
+router.get('/:budgetId/expenses/:expenseId', 
+  validateBudgetId,
+  validateBudgetExists,
+  validateExpenseId,
+  validateExpenseExists,
+  hasAccess,
+  ExpensesController.getById
+)
 
 router.put('/:budgetId/expenses/:expenseId',
-  // validateExpenseId, // se valida en la linea 15
+  // validateExpenseId, // se valida en la linea 18
   validateExpenseInputs,
   handleInputErrors,
   ExpensesController.updateById

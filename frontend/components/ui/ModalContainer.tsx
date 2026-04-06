@@ -22,8 +22,10 @@ export default function ModalContainer() {
 
   // renderizar forms dependiendo la url
   const addExpense = searchParams.get('addExpense')
+  const editExpense = searchParams.get('editExpenseId')
   const getComponentName = () => {
     if(addExpense) return 'AddExpense' // la key del diccionario
+    if(editExpense) return 'EditExpense'
   }
 
   const componentName = getComponentName() // viaja la key del diccionario - componentName = 'Add | Edit | Delete'
