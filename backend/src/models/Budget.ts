@@ -25,7 +25,7 @@ class Budget extends Model {
     onUpdate: 'CASCADE', // RESTRICT
     onDelete: 'CASCADE'
   })
-  declare exprenses: Expense[]
+  declare expenses: Expense[]
 
   @ForeignKey(() => User)
   declare userId: number
