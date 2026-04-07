@@ -56,7 +56,9 @@ export const validateExpenseExists = async(req: Request, res: Response, next: Ne
 
 // gasto pertenece a presupuesto?
 export const belongsToBudget = async(req: Request, res: Response, next: NextFunction) => {
-  if(req.budget.id !== req.expense.id) {
+  if(req.budget.id !== req.expense.budgetId) {
+    console.log(req.budget.id)
+    console.log(req.expense.id)
     const error = new Error('Acción no válida')
     return res.status(403).json({error: error.message})
   }

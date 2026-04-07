@@ -4,6 +4,8 @@ import AddExpenseButton from '@/components/expenses/AddExpenseButton';
 import ModalContainer from '@/components/ui/ModalContainer';
 import { formatCurrency, formatDate } from '@/src/utils';
 import ExpenseMenu from '@/components/expenses/ExpenseMenu';
+import Amount from '@/components/ui/Amount';
+import ProgressBar from '@/components/budgets/ProgressBar';
 
 interface Props {
   params: Promise<{ id: string }>
@@ -21,6 +23,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BudgetDetailsPage({ params }: Props) {
   const budget = await getBudget((await params).id)
 
+  const totalSpend = budget.expenses.reduce((total, index) => +index.amount + total, 0)
+  const totalAvailable = +budget.amount - totalSpend
+  const percentage = ((totalSpend / +budget.amount) * 100).toFixed(2)
+
   return (
     <>
       <div className='flex justify-between items-center'>
@@ -36,6 +42,28 @@ export default async function BudgetDetailsPage({ params }: Props) {
         budget.expenses.length
           ? (
             <>
+              <div className='grid grid-cols-1 md:grid-cols-2 mt-10'>
+                <ProgressBar percentage={+percentage} />
+
+                <div className='flex flex-col justify-center items-center md:items-start gap-5'>
+                  <Amount 
+                    label="Presupuesto"
+                    amount={+budget.amount}
+                  />
+
+                  <Amount 
+                    label="Disponible"
+                    amount={totalAvailable}
+                  />
+
+                  <Amount 
+                    label="Gastado"
+                    amount={totalSpend}
+                  />
+                </div>
+              </div>
+
+
               <h1 className='font-black text-4xl text-purple-950 mt-10'>Gastos en este presupuesto</h1>
 
               <ul role="list" className="divide-y divide-gray-300 border shadow-lg mt-10 ">

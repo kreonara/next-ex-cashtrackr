@@ -57,6 +57,7 @@ export default function DeleteExpenseForm({ closeModal }: DeleteExpenseForm) {
           onClick={closeModal}
         >Cancelar</button>
         <button
+          onClick={() => action()}
           type='button'
           className="bg-red-500 w-full p-3 text-white uppercase font-bold hover:bg-red-600 cursor-pointer transition-colors"
         >Eliminar</button>
