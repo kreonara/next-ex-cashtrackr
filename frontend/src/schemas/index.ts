@@ -103,3 +103,14 @@ export const DraftExpenseSchema = z.object({
 
 export type Expense = z.infer<typeof ExpenseAPIResponseSchema>
 export type DraftExpense = z.infer<typeof DraftExpenseSchema>
+
+
+// profile
+export const UpdatePasswordSchema = z.object({
+  current_password: z.string().min(1, {message: 'El Password no puede ir vacio'}),
+  password: z.string().min(8, {message: 'El nuevo Password debe ser de mínimo 8 caracteres'}),
+  password_confirmation: z.string()
+}).refine(data => data.password === data.password_confirmation, {
+  message: 'Los Passwords no son iguales',
+  path: ["password_confirmation"]
+})
