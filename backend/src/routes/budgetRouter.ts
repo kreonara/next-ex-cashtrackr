@@ -4,7 +4,7 @@ import { body, param } from 'express-validator';
 import { handleInputErrors } from '../middleware/validation';
 import { hasAccess, validateBudgetExists, validateBudgetId, validateBudgetInputs } from '../middleware/budget';
 import { ExpensesController } from '../controllers/ExpenseController';
-import { validateExpenseExists, validateExpenseId, validateExpenseInputs } from '../middleware/expense';
+import { belongsToBudget, validateExpenseExists, validateExpenseId, validateExpenseInputs } from '../middleware/expense';
 import { authenticate } from '../middleware/auth';
 
 const router = Router()
@@ -18,6 +18,7 @@ router.use(authenticate) // req.user
 // router.param('expenseId', validateExpenseId)
 // router.param('expenseId', validateExpenseExists) // req.budget
 // router.param('expenseId', hasAccess)
+// router.param('expenseId', belongsToBudget)
 
 router.get('/', BudgetController.getAll)
 
@@ -74,13 +75,25 @@ router.get('/:budgetId/expenses/:expenseId',
 )
 
 router.put('/:budgetId/expenses/:expenseId',
-  // validateExpenseId, // se valida en la linea 18
+  validateBudgetId,
+  validateBudgetExists,
+  validateExpenseId,
+  validateExpenseExists,
+  hasAccess,
   validateExpenseInputs,
   handleInputErrors,
   ExpensesController.updateById
 )
 
-router.delete('/:budgetId/expenses/:expenseId', ExpensesController.deleteById)
+router.delete('/:budgetId/expenses/:expenseId',
+  validateBudgetId,
+  validateBudgetExists,
+  validateExpenseId,
+  validateExpenseExists,
+  belongsToBudget,
+  handleInputErrors,
+  ExpensesController.deleteById
+)
 
 
 export default router
